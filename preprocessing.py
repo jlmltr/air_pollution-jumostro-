@@ -1,7 +1,8 @@
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 import numpy as np
+import pandas as pd
 
 class columnDropTransformer():
     def __init__(self, ex_str):
@@ -52,6 +53,20 @@ class logTransformer():
     def fit(self, X, y=None):
         return self
     
+class polynomialTransformer():
+    def __init__(self):
+        pass
+
+    def transform(self, X, y=None):        
+        trans = PolynomialFeatures(degree=2, interaction_only=True)
+        transformed = trans.fit_transform(X)
+        X = pd.DataFrame(transformed)
+        return X
+    
+    def fit(self, X, y=None):
+        return self
+    
+    
 def get_preprocessor():
 
     wind_cols = ["u_component_of_wind_10m_above_ground", "v_component_of_wind_10m_above_ground"]
@@ -64,7 +79,8 @@ def get_preprocessor():
         ("drop_cols", columnDropTransformer(ex_str)),
         ("impute", SimpleImputer(strategy="median")),
         ("logit", logTransformer(log_cols)),
-        ("scaling", StandardScaler())
+        ("scaling", StandardScaler()),
+        ("polynomial", polynomialTransformer()),
     ])
 
     return preprocessor
