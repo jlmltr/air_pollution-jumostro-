@@ -36,14 +36,15 @@ def create_final_table(y_pred, y_test, X_test):
 
 
     output_dict = {
-        'place_and_date': X_test_df['Place_ID X Date'].head(10).to_list(),
-        'real_target': y_test_df['target'].head(10).to_list(),
-        'predicted_target': y_pred_df['predicted_target'].round(1).head(10).to_list()                  
+        'place_and_date': X_test_df['Place_ID X Date'].to_list(),
+        'real_target': y_test_df['target'].to_list(),
+        'predicted_target': y_pred_df['predicted_target'].round(1).to_list()                  
     }
 
     final_df = pd.DataFrame(data=output_dict)
+    final_df.to_csv('./data/predictions.csv')
     print("FINAL PREDICTIONS___________________________________________________________")
-    print(final_df)
+    print(final_df.head(10))
 
     print("SCORES_______________________________________________________")
     print("RMSE: ", mean_squared_error(y_test, y_pred, squared=False))
