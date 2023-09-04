@@ -1,6 +1,8 @@
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn import set_config
+set_config(transform_output='pandas')
 import numpy as np
 import pandas as pd
 
@@ -34,7 +36,7 @@ class windTransformer():
         self.columns=columns
 
     def transform(self, X, y=None):
-        X2 = X.copy(deep=True)
+        X2 = X.copy()
         X2["wind_speed"] = X2.apply(lambda x: np.sqrt(x[self.columns[0]]**2 + x[self.columns[1]]**2), axis=1)
         return X2.drop(self.columns, axis=1)
 
@@ -46,7 +48,7 @@ class logTransformer():
         self.columns=columns
 
     def transform(self, X, y=None):
-        X2 = X.copy(deep=True)
+        X2 = X.copy()
         X2[self.columns] = X2[self.columns].applymap(lambda x: np.log(x + 1))
         return X2
     
